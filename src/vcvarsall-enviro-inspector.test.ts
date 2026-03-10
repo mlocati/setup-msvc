@@ -43,6 +43,7 @@ describe('Architecture', () => {
 
 describe('PlatformType', () => {
   it('should have correct values', () => {
+    expect(PlatformType.Desktop).toBe('desktop');
     expect(PlatformType.Store).toBe('store');
     expect(PlatformType.UWP).toBe('uwp');
   });
@@ -83,7 +84,7 @@ describe('buildArgumentsFromInputs', () => {
   const defaultInputs: Inputs = {
     vsVersion: 'latest',
     architecture: Architecture.x86,
-    platformType: null,
+    platformType: PlatformType.Desktop,
     windowsSdkVersion: null,
     toolsetVersion: null,
     spectreMode: false,
@@ -94,8 +95,16 @@ describe('buildArgumentsFromInputs', () => {
   };
   it('should always include the architecture', () => {
     const args = buildArgumentsFromInputs({...defaultInputs, architecture: Architecture.x64_arm64});
-    expect(args).toContain('amd64_arm64');
-    expect(args[0]).toBe('amd64_arm64');
+    expect(args).toEqual(['amd64_arm64']);
+  });
+  it('should handle desktop platform type', () => {
+    const inputs: Inputs = {
+      ...defaultInputs,
+      platformType: PlatformType.Desktop,
+      windowsSdkVersion: '10.0.19041.0',
+    };
+    const args = buildArgumentsFromInputs(inputs);
+    expect(args).toEqual(['x86', '10.0.19041.0']);
   });
   it('should include platformType and windowsSdkVersion when provided', () => {
     const inputs: Inputs = {
@@ -104,8 +113,7 @@ describe('buildArgumentsFromInputs', () => {
       windowsSdkVersion: '10.0.19041.0',
     };
     const args = buildArgumentsFromInputs(inputs);
-    expect(args).toContain('uwp');
-    expect(args).toContain('10.0.19041.0');
+    expect(args).toEqual(['x86', 'uwp', '10.0.19041.0']);
   });
   it('should format toolsetVersion with the correct flag', () => {
     const inputs: Inputs = {
@@ -113,13 +121,13 @@ describe('buildArgumentsFromInputs', () => {
       toolsetVersion: '14.29',
     };
     const args = buildArgumentsFromInputs(inputs);
-    expect(args).toContain('-vcvars_ver=14.29');
+    expect(args).toEqual(['x86', '-vcvars_ver=14.29']);
   });
   it('should include spectre flag only when spectreMode is true', () => {
     const withoutSpectre = buildArgumentsFromInputs({...defaultInputs, spectreMode: false});
+    expect(withoutSpectre).toEqual(['x86']);
     const withSpectre = buildArgumentsFromInputs({...defaultInputs, spectreMode: true});
-    expect(withoutSpectre).not.toContain('-vcvars_spectre_libs=spectre');
-    expect(withSpectre).toContain('-vcvars_spectre_libs=spectre');
+    expect(withSpectre).toEqual(['x86', '-vcvars_spectre_libs=spectre']);
   });
   it('should produce the correct array when all optional inputs are set', () => {
     const inputs: Inputs = {

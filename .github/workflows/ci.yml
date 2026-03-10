@@ -3,23 +3,23 @@ name: Continuous Integration
 on:
   pull_request:
     paths:
-      - '.github/workflows/ci.yml'
-      - 'dist/**'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
+      - ".github/workflows/ci.yml"
+      - "dist/**"
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
   push:
     branches:
       - dev
       - v*
     tags-ignore:
-      - '**'
+      - "**"
     paths:
-      - '.github/workflows/ci.yml'
-      - 'dist/**'
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
+      - ".github/workflows/ci.yml"
+      - "dist/**"
+      - "src/**"
+      - "package.json"
+      - "package-lock.json"
   workflow_dispatch:
 
 jobs:
@@ -70,7 +70,7 @@ jobs:
           file: ./coverage/clover.xml
 
   test-non-windows:
-    name: Test on Ubuntu
+    name: Test on ubuntu-latest
     runs-on: ubuntu-latest
     needs:
       - check-syntax
@@ -110,8 +110,15 @@ jobs:
       - check-syntax
       - check-dist
       - jest
-    name: Test on Windows
-    runs-on: windows-2025
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-2022
+          - windows-2025
+          - windows-2025-vs2026
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: pwsh
@@ -181,9 +188,6 @@ jobs:
           }
       - name: Run action (updating environment variables)
         uses: ./
-        with:
-          canonicalize-paths: true
-          debug: true
       - name: Check that environment variables were updated
         run: |
           if (-not $env:INCLUDE) {

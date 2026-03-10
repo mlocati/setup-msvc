@@ -49,6 +49,7 @@ export enum Architecture {
 }
 
 export enum PlatformType {
+  Desktop = 'desktop',
   Store = 'store',
   UWP = 'uwp',
 }
@@ -71,7 +72,7 @@ export function isToolsetVersion(s: string): s is ToolsetVersion {
 function buildArgumentsFromInputs(inputs: Inputs): string[] {
   const args: string[] = [];
   args.push(inputs.architecture);
-  if (inputs.platformType !== null) {
+  if (inputs.platformType !== PlatformType.Desktop) {
     args.push(inputs.platformType);
   }
   if (inputs.windowsSdkVersion !== null) {

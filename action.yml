@@ -15,6 +15,7 @@ inputs:
   platform-type:
     description: The platform type for the Visual Studio tools ('store', 'uwp', or empty for classic desktop)
     required: false
+    default: desktop
   windows-sdk-version:
     description: The Windows SDK version to use (e.g. '10.0.26100.0', '8.1') - if not specified, the action will try to determine it based on the installed SDKs
     required: false
@@ -24,11 +25,11 @@ inputs:
   spectre-mode:
     description: Whether to enable Spectre mitigation (true or false)
     required: false
-    default: 'false'
+    default: "false"
   canonicalize-paths:
     description: "If true, verifies if paths in environment variables exist, resolves symbolic links, and normalizes casing (e.g., converts 'c:\\pRoGrAm fILES\\Foo\\' to 'C:\\Program Files\\Foo')"
     required: false
-    default: 'false'
+    default: "false"
   if-not-windows:
     description: What to do if the action is run on a non-Windows system ('fail' to fail the action, 'warn' to print a warning, 'ignore' to do nothing)
     required: false
@@ -36,11 +37,11 @@ inputs:
   update-env:
     description: Whether to update the environment variables of subsequent steps in the job
     required: false
-    default: 'true'
+    default: "true"
   debug:
     description: Dump debug information
     required: false
-    default: 'false'
+    default: "false"
 
 outputs:
   vcvarsall-path:

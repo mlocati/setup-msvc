@@ -69,11 +69,12 @@ function resolveArchitecture(architecture: string): Architecture {
   }
 }
 
-function resolvePlatformType(platformType: string): PlatformType | null {
+function resolvePlatformType(platformType: string): PlatformType {
   platformType = platformType.trim();
   switch (platformType.toLowerCase()) {
     case '':
-      return null;
+    case 'desktop':
+      return PlatformType.Desktop;
     case 'store':
       return PlatformType.Store;
     case 'uwp':
@@ -125,7 +126,7 @@ function parseIfNonWindows(value: string): IfNonWindows {
 export interface Inputs {
   vsVersion: VisualStudioVersion | LatestVersion;
   architecture: Architecture;
-  platformType: PlatformType | null;
+  platformType: PlatformType;
   windowsSdkVersion: WindowsSdkVersion | null;
   toolsetVersion: ToolsetVersion | null;
   spectreMode: boolean;

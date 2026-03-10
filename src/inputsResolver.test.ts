@@ -1,5 +1,5 @@
 import {IfNonWindows} from './checkPlatform';
-import {Architecture} from './vcvarsall-enviro-inspector';
+import {Architecture, PlatformType} from './vcvarsall-enviro-inspector';
 import resolveInputs, {_testInternals} from './inputsResolver';
 import * as core from '@actions/core';
 
@@ -93,9 +93,9 @@ describe('resolvePlatformType', () => {
   }
 
   it('should resolve platform types correctly', () => {
-    expect(resolvePlatformType('')).toBeNull();
-    expect(resolvePlatformType('   ')).toBeNull();
-    expect(resolvePlatformType('\r\n\t \n')).toBeNull();
+    expect(resolvePlatformType('')).toBe('desktop');
+    expect(resolvePlatformType('   ')).toBe('desktop');
+    expect(resolvePlatformType('\r\n\t \n')).toBe('desktop');
     expect(resolvePlatformType('store')).toBe('store');
     expect(resolvePlatformType('   StOrE   ')).toBe('store');
     expect(resolvePlatformType('\nuWp')).toBe('uwp');
@@ -174,7 +174,7 @@ describe('resolveInputs', () => {
     const inputs = resolveInputs();
     expect(inputs.vsVersion).toBe('latest');
     expect(inputs.architecture).toBe(expectedArchitecture);
-    expect(inputs.platformType).toBeNull();
+    expect(inputs.platformType).toBe(PlatformType.Desktop);
     expect(inputs.windowsSdkVersion).toBeNull();
     expect(inputs.toolsetVersion).toBeNull();
     expect(inputs.spectreMode).toBe(false);
