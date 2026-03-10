@@ -188,14 +188,18 @@ jobs:
           }
       - name: Run action (updating environment variables)
         uses: ./
+        with:
+          update-env: |
+            !LIB
+          debug: true
       - name: Check that environment variables were updated
         run: |
           if (-not $env:INCLUDE) {
-            Write-Error 'INCLUDE environment variables was not set'
+            Write-Error 'INCLUDE environment variable has not been set'
             exit 1
           }
-          if (-not $env:LIB) {
-            Write-Error 'LIB environment variables was not set'
+          if ($env:LIB) {
+            Write-Error 'LIB environment variable has been set'
             exit 1
           }
       - name: Check that CL.exe is in PATH

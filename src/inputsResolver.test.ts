@@ -145,22 +145,48 @@ describe('resolveToolsetVersion', () => {
   });
 });
 
-describe('parseIfNonWindows', () => {
-  const parseIfNonWindows = _testInternals?.parseIfNonWindows;
-  if (!parseIfNonWindows) {
-    throw new Error('parseIfNonWindows is not available for testing');
+describe('resolveIfNonWindows', () => {
+  const resolveIfNonWindows = _testInternals?.resolveIfNonWindows;
+  if (!resolveIfNonWindows) {
+    throw new Error('resolveIfNonWindows is not available for testing');
   }
 
   it('should return the input string on non-Windows platforms', () => {
-    expect(parseIfNonWindows('')).toBe(IfNonWindows.Fail);
-    expect(parseIfNonWindows(' \r\n \t')).toBe(IfNonWindows.Fail);
-    expect(parseIfNonWindows('fail')).toBe(IfNonWindows.Fail);
-    expect(parseIfNonWindows('\n\tfAiL   \n')).toBe(IfNonWindows.Fail);
-    expect(parseIfNonWindows('warn')).toBe(IfNonWindows.Warn);
-    expect(parseIfNonWindows('\n\twArN   \n')).toBe(IfNonWindows.Warn);
-    expect(parseIfNonWindows('ignore')).toBe(IfNonWindows.Ignore);
-    expect(parseIfNonWindows('\n\tiGnOrE   \n')).toBe(IfNonWindows.Ignore);
-    expect(() => parseIfNonWindows(' iNvAlId\n')).toThrow('Invalid value for if-not-windows: iNvAlId');
+    expect(resolveIfNonWindows('')).toBe(IfNonWindows.Fail);
+    expect(resolveIfNonWindows(' \r\n \t')).toBe(IfNonWindows.Fail);
+    expect(resolveIfNonWindows('fail')).toBe(IfNonWindows.Fail);
+    expect(resolveIfNonWindows('\n\tfAiL   \n')).toBe(IfNonWindows.Fail);
+    expect(resolveIfNonWindows('warn')).toBe(IfNonWindows.Warn);
+    expect(resolveIfNonWindows('\n\twArN   \n')).toBe(IfNonWindows.Warn);
+    expect(resolveIfNonWindows('ignore')).toBe(IfNonWindows.Ignore);
+    expect(resolveIfNonWindows('\n\tiGnOrE   \n')).toBe(IfNonWindows.Ignore);
+    expect(() => resolveIfNonWindows(' iNvAlId\n')).toThrow('Invalid value for if-not-windows: iNvAlId');
+  });
+});
+
+describe('resolveUpdateEnv', () => {
+  const resolveUpdateEnv = _testInternals?.resolveUpdateEnv;
+  if (!resolveUpdateEnv) {
+    throw new Error('resolveUpdateEnv is not available for testing');
+  }
+
+  const updateEnvCases: Array<[string, string | boolean | {negated: boolean; upperCaseNames: string[]}]> = [
+    ['', true],
+    [' \n \t\n', true],
+    ['TRUE', true],
+    [' \n  TrUe \t ', true],
+    [' FaLsE ', false],
+    ['Path', {negated: false, upperCaseNames: ['PATH']}],
+    ['Path\n', {negated: false, upperCaseNames: ['PATH']}],
+    ['Path\nInclude', {negated: false, upperCaseNames: ['PATH', 'INCLUDE']}],
+    ['Path\nInclude\n', {negated: false, upperCaseNames: ['PATH', 'INCLUDE']}],
+    [' \n Path \n Include \n ', {negated: false, upperCaseNames: ['PATH', 'INCLUDE']}],
+    ['A\n!B\nC', {negated: false, upperCaseNames: ['A', 'C']}],
+    ['!A\n!B\n!C', {negated: true, upperCaseNames: ['A', 'B', 'C']}],
+  ];
+  it.each(updateEnvCases)('should resolve updateEnv values correctly for "%s"', (input, expected) => {
+    const actual = resolveUpdateEnv(input);
+    expect(actual).toEqual(expected);
   });
 });
 

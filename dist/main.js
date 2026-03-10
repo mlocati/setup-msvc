@@ -29531,7 +29531,7 @@ function resolveToolsetVersion(version) {
     }
     throw new Error(`Invalid toolset version: ${version}`);
 }
-function parseIfNonWindows(value) {
+function resolveIfNonWindows(value) {
     value = value.trim();
     switch (value.toLowerCase()) {
         case '':
@@ -29545,6 +29545,31 @@ function parseIfNonWindows(value) {
             throw new Error(`Invalid value for if-not-windows: ${value}`);
     }
 }
+function resolveUpdateEnv(value) {
+    value = value.trim();
+    if (value === '' || value.toLowerCase() === 'true') {
+        return true;
+    }
+    if (value.toLowerCase() === 'false') {
+        return false;
+    }
+    let vars = value
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .map((v) => v.trim())
+        .filter((v) => v !== '' && v !== '!');
+    const someIsNotNegated = vars.some((v) => !v.startsWith('!'));
+    if (someIsNotNegated) {
+        return {
+            negated: false,
+            upperCaseNames: vars.filter((v) => !v.startsWith('!')).map((v) => v.toUpperCase()),
+        };
+    }
+    return {
+        negated: true,
+        upperCaseNames: vars.map((v) => v.substring(1).toUpperCase()),
+    };
+}
 function resolveInputs() {
     return {
         vsVersion: resolveVisualStudioVersion(getInput('vs-version')),
@@ -29554,8 +29579,8 @@ function resolveInputs() {
         toolsetVersion: resolveToolsetVersion(getInput('toolset-version')),
         spectreMode: getBooleanInput('spectre-mode'),
         canonicalizePaths: getBooleanInput('canonicalize-paths'),
-        ifNotWindows: parseIfNonWindows(getInput('if-not-windows')),
-        updateEnv: getBooleanInput('update-env'),
+        ifNotWindows: resolveIfNonWindows(getInput('if-not-windows')),
+        updateEnv: resolveUpdateEnv(getInput('update-env')),
         debug: getBooleanInput('debug'),
     };
 }
@@ -29822,9 +29847,16 @@ process.env.SETUP_MSVC_TESTING === 'true'
         }
     : undefined;
 
-function updateEnv(vars) {
+function updateEnv(vars, filter) {
     for (const [key, value] of vars) {
-        switch (key.toUpperCase()) {
+        const upperKey = key.toUpperCase();
+        if (filter) {
+            const inList = filter.upperCaseNames.includes(upperKey);
+            if (filter.negated === inList) {
+                continue;
+            }
+        }
+        switch (upperKey) {
             case 'PATH':
                 const currentPath = process.env.PATH;
                 exportVariable(key, `${value};${currentPath}`);
@@ -29847,8 +29879,8 @@ async function run() {
         const vcVarsAllPath = await findVCVarsAll(vc.path);
         const vars = await inspectVCVarsAllEnvironmentVariables(inputs, vcVarsAllPath);
         setOutputs(vcVarsAllPath, vars);
-        if (inputs.updateEnv) {
-            updateEnv(vars);
+        if (inputs.updateEnv !== false) {
+            updateEnv(vars, inputs.updateEnv === true ? undefined : inputs.updateEnv);
         }
         info(`Visual Studio: ${vc.vsVersion.year}`);
         info(`Visual C++ path: ${vc.path}`);

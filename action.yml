@@ -35,7 +35,7 @@ inputs:
     required: false
     default: fail
   update-env:
-    description: Whether to update the environment variables of subsequent steps in the job
+    description: Set to true to update the environment variables of subsequent steps in the job, false to not update them, or to a newline-separated list of variable names to only update a subset of them (prepend "!" to a variable name to exclude it from updating when using a list)
     required: false
     default: "true"
   debug:

@@ -10,6 +10,11 @@ import {
   versions as VisualStudioVersions,
 } from './VisualStudio';
 
+export interface EnvVarFilter {
+  readonly negated: boolean;
+  readonly upperCaseNames: Readonly<[string, ...string[]]>;
+}
+
 function resolveVisualStudioVersion(version: string): VisualStudioVersion | LatestVersion {
   version = version.trim();
   if (version === '' || ['latest', 'last'].includes(version.toLowerCase())) {
@@ -108,7 +113,7 @@ function resolveToolsetVersion(version: string): ToolsetVersion | null {
   throw new Error(`Invalid toolset version: ${version}`);
 }
 
-function parseIfNonWindows(value: string): IfNonWindows {
+function resolveIfNonWindows(value: string): IfNonWindows {
   value = value.trim();
   switch (value.toLowerCase()) {
     case '':
@@ -123,6 +128,32 @@ function parseIfNonWindows(value: string): IfNonWindows {
   }
 }
 
+function resolveUpdateEnv(value: string): boolean | EnvVarFilter {
+  value = value.trim();
+  if (value === '' || value.toLowerCase() === 'true') {
+    return true;
+  }
+  if (value.toLowerCase() === 'false') {
+    return false;
+  }
+  let vars: string[] = value
+    .replace(/\r/g, '\n')
+    .split('\n')
+    .map((v) => v.trim())
+    .filter((v) => v !== '' && v !== '!');
+  const someIsNotNegated = vars.some((v) => !v.startsWith('!'));
+  if (someIsNotNegated) {
+    return {
+      negated: false,
+      upperCaseNames: vars.filter((v) => !v.startsWith('!')).map((v) => v.toUpperCase()) as [string, ...string[]],
+    };
+  }
+  return {
+    negated: true,
+    upperCaseNames: vars.map((v) => v.substring(1).toUpperCase()) as [string, ...string[]],
+  };
+}
+
 export interface Inputs {
   vsVersion: VisualStudioVersion | LatestVersion;
   architecture: Architecture;
@@ -132,7 +163,7 @@ export interface Inputs {
   spectreMode: boolean;
   canonicalizePaths: boolean;
   ifNotWindows: IfNonWindows;
-  updateEnv: boolean;
+  updateEnv: boolean | EnvVarFilter;
   debug: boolean;
 }
 
@@ -145,8 +176,8 @@ export default function resolveInputs(): Inputs {
     toolsetVersion: resolveToolsetVersion(core.getInput('toolset-version')),
     spectreMode: core.getBooleanInput('spectre-mode'),
     canonicalizePaths: core.getBooleanInput('canonicalize-paths'),
-    ifNotWindows: parseIfNonWindows(core.getInput('if-not-windows')),
-    updateEnv: core.getBooleanInput('update-env'),
+    ifNotWindows: resolveIfNonWindows(core.getInput('if-not-windows')),
+    updateEnv: resolveUpdateEnv(core.getInput('update-env')),
     debug: core.getBooleanInput('debug'),
   };
 }
@@ -159,6 +190,7 @@ export const _testInternals =
         resolvePlatformType,
         resolveWindowsSdkVersion,
         resolveToolsetVersion,
-        parseIfNonWindows,
+        resolveIfNonWindows,
+        resolveUpdateEnv,
       }
     : undefined;

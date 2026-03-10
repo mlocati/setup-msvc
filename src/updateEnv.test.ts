@@ -13,21 +13,46 @@ afterEach(() => {
   process.env = {...originalEnv};
 });
 
+const originalPath = 'C:\\Windows\\System32';
+const sampleVars = new CaseInsensitiveStringMap([
+  ['Path', 'C:\\bin'],
+  ['INCLUDE', 'C:\\include'],
+  ['A', 'Avalue'],
+  ['B', 'Bvalue'],
+  ['C', 'Cvalue'],
+]);
+const exportedPath = sampleVars.get('Path') + ';' + originalPath;
+
 describe('updateEnv', () => {
-  it('should call core.exportVariable', () => {
-    const vars = new CaseInsensitiveStringMap([
-      ['Path', 'C:\\bin'],
-      ['INCLUDE', 'C:\\include'],
-      ['Unlisted', 'value'],
-    ]);
-    const originalPath = 'C:\\Windows\\System32';
+  it('should call core.exportVariable for all variables', () => {
     process.env.PATH = originalPath;
-    updateEnv(vars);
+    updateEnv(sampleVars);
     const exportedVariables = core.getExportedVariables();
     expect(exportedVariables).toEqual({
-      Path: `C:\\bin;${originalPath}`,
+      Path: exportedPath,
       INCLUDE: 'C:\\include',
-      Unlisted: 'value',
+      A: 'Avalue',
+      B: 'Bvalue',
+      C: 'Cvalue',
+    });
+  });
+  it('should filter variables when filter is a list', () => {
+    process.env.PATH = originalPath;
+    updateEnv(sampleVars, {negated: false, upperCaseNames: ['INCLUDE', 'B']});
+    const exportedVariables = core.getExportedVariables();
+    expect(exportedVariables).toEqual({
+      INCLUDE: 'C:\\include',
+      B: 'Bvalue',
+    });
+  });
+  it('should filter variables when filter is a negated list', () => {
+    process.env.PATH = originalPath;
+    updateEnv(sampleVars, {negated: true, upperCaseNames: ['INCLUDE', 'B']});
+    const exportedVariables = core.getExportedVariables();
+    expect(exportedVariables).toEqual({
+      Path: exportedPath,
+      A: 'Avalue',
+      C: 'Cvalue',
     });
   });
 });

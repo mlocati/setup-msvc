@@ -33,7 +33,8 @@ steps:
       spectre-mode: true
       canonicalize-paths: true
       if-not-windows: fail
-      update-env: false
+      update-env: |
+        !Path
       debug: true
   - name: Dump value of INCLUDE detected by by the setup-msvc action
     run: echo "${{ steps.msvc.outputs.include }}$"
@@ -201,6 +202,22 @@ Allowed values:
   The environment variables configured by Visual Studio (eg `Path`, `INCLUDE`, `LIB`, ...) will be available in subsequent workflow steps
 - `false`
   No environment variable will be set
+- newline-separated list of variable names to only update a subset of them (case insensitive)
+  Prepend "!" to a variable name to exclude it from updating.
+  Examples:
+  - Set all environment variables except `Path` and `LIB`
+    ```yml
+    update-env: |
+      !Path
+      !LIB
+    ```
+  - Set only the `Path` and `LIB` environment variables
+    ```yml
+    update-env: |
+      Path
+      LIB
+    ```
+
 
 ### `debug`
 

@@ -19,8 +19,8 @@ export async function run(): Promise<void> {
     const vcVarsAllPath = await findVCVarsAll(vc.path);
     const vars = await inspectVCVarsAllEnvironmentVariables(inputs, vcVarsAllPath);
     setOutputs(vcVarsAllPath, vars);
-    if (inputs.updateEnv) {
-      updateEnv(vars);
+    if (inputs.updateEnv !== false) {
+      updateEnv(vars, inputs.updateEnv === true ? undefined : inputs.updateEnv);
     }
     log.info(`Visual Studio: ${vc.vsVersion.year}`);
     log.info(`Visual C++ path: ${vc.path}`);
