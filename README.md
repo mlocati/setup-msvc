@@ -59,9 +59,10 @@ steps:
 ### `vs-version`
 
 Specify the Visual Studio version.
+
 Allowed values (case insensitive):
 
-- `latest` (default)
+- `latest` (default)  
   Aliases: `last`, empty string
 -  `2026`  
   Aliases: `18`, `18.…`
@@ -87,39 +88,40 @@ Allowed values (case insensitive):
 ### `architecture`
 
 Architecture for the MSVC tools.
+
 Allowed values (case insensitive):
 
-- `x86` (default in case of 32-bit OS)
-  Aliases: `32`, `i386`, `i686`, `ia32`, `win32`
-  Host: x86 or x64
-  Target: x86
-- `x64` (default in case of 64-bit OS)
-  Aliases:  `64`, `amd64`, `win64`, `x86_64`, `x86-64`
-  Host: x64
+- `x86` (default in case of 32-bit OS)  
+  Aliases: `32`, `i386`, `i686`, `ia32`, `win32`  
+  Host: x86 or x64  
+  Target: x86  
+- `x64` (default in case of 64-bit OS)  
+  Aliases: `64`, `amd64`, `win64`, `x86_64`, `x86-64`  
+  Host: x64  
   Target: x64
-- `x86_x64`
-  Aliases:  `x86_amd64`, `x86-amd64`, `x86-x64`
-  Host: x86 or x64
+- `x86_x64`  
+  Aliases: `x86_amd64`, `x86-amd64`, `x86-x64`  
+  Host: x86 or x64  
   Target: x64
-- `x86_arm`
-  Aliases:  `x86-arm`, `x86_arm32`, `x86-arm32`
-  Host: x86 or x64
+- `x86_arm`  
+  Aliases: `x86-arm`, `x86_arm32`, `x86-arm32`  
+  Host: x86 or x64  
   Target: ARM
-- `x86_arm64`
-  Aliases:  `x86-arm64`
-  Host: x86 or x64
+- `x86_arm64`  
+  Aliases: `x86-arm64`  
+  Host: x86 or x64  
   Target: ARM64
-- `x64_x86`
-  Aliases:  `amd64_x86`, `amd64-x86`, `x64-x86`
-  Host: x64
+- `x64_x86`  
+  Aliases: `amd64_x86`, `amd64-x86`, `x64-x86`  
+  Host: x64  
   Target: x86
-- `x64_arm`
-  Aliases:  `amd64_arm`, `amd64-arm`, `x64-arm`, `amd64_arm32`, `amd64-arm32`, `x64_arm32`, `x64-arm32`
-  Host: x64
+- `x64_arm`  
+  Aliases: `amd64_arm`, `amd64-arm`, `x64-arm`, `amd64_arm32`, `amd64-arm32`, `x64_arm32`, `x64-arm32`  
+  Host: x64  
   Target: ARM
-- `x64_arm64`
-  Aliases:  `amd64_arm64`, `amd64-arm64`, `x64-arm64`
-  Host: x64
+- `x64_arm64`  
+  Aliases: `amd64_arm64`, `amd64-arm64`, `x64-arm64`  
+  Host: x64  
   Target: ARM64
 
 ### `platform-type`
@@ -128,11 +130,11 @@ Configure the target application model.
 
 Allowed values (case insensitive):
 
-- `desktop` (default)
+- `desktop` (default)  
   For building desktop / console applications
-- `uwp`
+- `uwp`  
   For building Universal Windows Platform applications (Microsoft Store apps, ...)
-- `store`
+- `store`  
   Legacy alias of `uwp`
 
 ### `windows-sdk-version`
@@ -158,9 +160,9 @@ Whether spectre mode should be enabled.
 
 Allowed values:
 
-- `false` (default)
+- `false` (default)  
   for libraries without spectre mitigations
-- `true`
+- `true`  
   for libraries with spectre mitigations
 
 ### `canonicalize-paths`
@@ -169,27 +171,27 @@ Use this input to standardize the paths in the environment variables set by Visu
 
 Allowed values:
 
-- `false` (default)
+- `false` (default)  
   Don't touch the environment variables
-- `true`
-  Standardize existing paths.
-  For example, this may change the value of `VCINSTALLDIR` from
-  `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\`
-  to
+- `true`  
+  Standardize existing paths.  
+  For example, this may change the value of `VCINSTALLDIR` from  
+  `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\`  
+  to  
   `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC`
 
 ### `if-not-windows`
 
-This action only works on Windows runners.
+This action only works on Windows runners.  
 With this option, you can control what to do when the runner is not Windows.
 
 Allowed values (case insensitive):
 
-- `fail` (default)
+- `fail` (default)  
   The action will fail
-- `warn`
+- `warn`  
   The action will raise a warning, without failing
-- `ignore`
+- `ignore`  
   The action won't do anything
 
 ### `update-env`
@@ -198,12 +200,12 @@ Use this option to control whether environment variables should be set for subse
 
 Allowed values:
 
-- `true` (default)
+- `true` (default)  
   The environment variables configured by Visual Studio (eg `Path`, `INCLUDE`, `LIB`, ...) will be available in subsequent workflow steps
-- `false`
+- `false`  
   No environment variable will be set
-- newline-separated list of variable names to only update a subset of them (case insensitive)
-  Prepend "!" to a variable name to exclude it from updating.
+- newline-separated list of variable names to only update a subset of them (case insensitive)  
+  Prepend `!` to a variable name to exclude it from updating.  
   Examples:
   - Set all environment variables except `Path` and `LIB`
     ```yml
@@ -222,11 +224,12 @@ Allowed values:
 ### `debug`
 
 Use this option to control whether you want to see debug details.
+
 Allowed values:
 
-- `false` (default)
+- `false` (default)  
   No debug message will be printed
-- `true`
+- `true`  
   Debug messages will be sent to the workflow
 
 ## Outputs
@@ -235,135 +238,119 @@ Allowed values:
 
 The path of the detected `vcvarsall.bat` file Visual Studio.
 
-Example:
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat`
 
 ### `path`
 
 The directories **added** by Visual Studio to the `Path` environment variables.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VC\VCPackages;…`
 
 ### `include`
 
 The value of the `INCLUDE` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\include;…`
 
 ### `lib`
 
 The value of the `LIB` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64;…`
 
 ### `libpath`
 
 The value of the `LIBPATH` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64;…`
 
 ### `vc-installdir`
 
 The value of the `VCINSTALLDIR` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\`
 
 ### `vs-installdir`
 
 The value of the `VSINSTALLDIR` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\`
 
 ### `vs-version`
 
 The value of the `VisualStudioVersion` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `17.0`
 
 ### `vctools-installdir`
 
 The value of the `VCTOOLSINSTALLDIR` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\`
 
 ### `vctools-version`
 
 The value of the `VCTOOLSVERSION` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `14.44.35207`
 
 ### `windows-sdk-dir`
 
 The value of the `WindowsSdkDir` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `C:\Program Files (x86)\Windows Kits\10\`
 
 ### `windows-sdk-version`
 
 The value of the `WindowsSDKVersion` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `10.0.26100.0\`
 
 ### `windows-sdk-lib-version`
 
 The value of the `WindowsSDKLibVersion` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `10.0.26100.0\`
 
 ### `ucrt-version`
 
 The value of the `UCRTVersion` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `10.0.26100.0`
 
 ### `platform`
 
 The value of the `Platform` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `x64`
 
 ### `vcmd-arg-host-arch`
 
 The value of the `VSCMD_ARG_HOST_ARCH` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `x64`
 
 ### `vcmd-arg-tgt-arch`
 
 The value of the `VSCMD_ARG_TGT_ARCH` environment variable set by Visual Studio.
 
-Example:
-
+Example:  
 `x64`
 
 ### `all`
@@ -371,8 +358,7 @@ Example:
 All the environment variables configured by Visual Studio, in JSON format.
 Please remark that `Path` will only include the directories **added** by Visual Studio.
 
-Example:
-
+Example:  
 ```json
 {
   "Path": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64;C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\IDE\\VC\\VCPackages;…"

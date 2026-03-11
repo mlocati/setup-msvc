@@ -82,7 +82,7 @@ outputs:
     description: All the environment variables set by vcvarsall.bat, in JSON format
 
 runs:
-  using: node20
+  using: node24
   main: dist/main.js
 
 branding:

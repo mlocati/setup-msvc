@@ -1,7 +1,5 @@
-/.github/ export-ignore
-/.vscode/ export-ignore
-/src/ export-ignore
 /.* export-ignore
+/src/ export-ignore
 /jest.config.* export-ignore
 /package-lock.json export-ignore
 /README.md export-ignore
