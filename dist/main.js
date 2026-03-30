@@ -29270,6 +29270,9 @@ async function run$1(commandLine, args, options) {
     };
 }
 
+/**
+ * @see https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170#vcvarsall-syntax
+ */
 var Architecture;
 (function (Architecture) {
     /**
@@ -29289,9 +29292,9 @@ var Architecture;
     Architecture["x86_x64"] = "x86_amd64";
     /**
      * Host: x86 or x64
-     * Target: ARM
+     * Target: ARM32
      */
-    Architecture["x86_arm"] = "x86_arm";
+    Architecture["x86_arm32"] = "x86_arm";
     /**
      * Host: x86 or x64
      * Target: ARM64
@@ -29304,9 +29307,9 @@ var Architecture;
     Architecture["x64_x86"] = "amd64_x86";
     /**
      * Host: x64
-     * Target: ARM
+     * Target: ARM32
      */
-    Architecture["x64_arm"] = "amd64_arm";
+    Architecture["x64_arm32"] = "amd64_arm";
     /**
      * Host: x64
      * Target: ARM64
@@ -29477,7 +29480,7 @@ function resolveArchitecture(architecture) {
             return Architecture.x86_x64;
         case 'x86_arm':
         case 'x86_arm32':
-            return Architecture.x86_arm;
+            return Architecture.x86_arm32;
         case 'x86_arm64':
             return Architecture.x86_arm64;
         case 'amd64_x86':
@@ -29487,9 +29490,10 @@ function resolveArchitecture(architecture) {
         case 'x64_arm':
         case 'amd64_arm32':
         case 'x64_arm32':
-            return Architecture.x64_arm;
+            return Architecture.x64_arm32;
         case 'amd64_arm64':
         case 'x64_arm64':
+        case 'arm64':
             return Architecture.x64_arm64;
         default:
             throw new Error(`Unsupported architecture: ${architecture}`);

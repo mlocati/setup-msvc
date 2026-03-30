@@ -5,6 +5,9 @@ import run, {Result as RunResult} from './runner';
 import {type CaseInsensitiveStringMap} from './CaseInsensitiveMap';
 import {Inputs} from './inputsResolver';
 
+/**
+ * @see https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170#vcvarsall-syntax
+ */
 export enum Architecture {
   /**
    * Host: x86 or x64
@@ -23,9 +26,9 @@ export enum Architecture {
   x86_x64 = 'x86_amd64',
   /**
    * Host: x86 or x64
-   * Target: ARM
+   * Target: ARM32
    */
-  x86_arm = 'x86_arm',
+  x86_arm32 = 'x86_arm',
   /**
    * Host: x86 or x64
    * Target: ARM64
@@ -38,9 +41,9 @@ export enum Architecture {
   x64_x86 = 'amd64_x86',
   /**
    * Host: x64
-   * Target: ARM
+   * Target: ARM32
    */
-  x64_arm = 'amd64_arm',
+  x64_arm32 = 'amd64_arm',
   /**
    * Host: x64
    * Target: ARM64

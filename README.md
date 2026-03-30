@@ -120,7 +120,7 @@ Allowed values (case insensitive):
   Host: x64  
   Target: ARM
 - `x64_arm64`  
-  Aliases: `amd64_arm64`, `amd64-arm64`, `x64-arm64`  
+  Aliases: `amd64_arm64`, `amd64-arm64`, `x64_arm64`, `x64-arm64`, `arm64`  
   Host: x64  
   Target: ARM64
 

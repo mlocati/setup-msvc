@@ -55,7 +55,7 @@ function resolveArchitecture(architecture: string): Architecture {
       return Architecture.x86_x64;
     case 'x86_arm':
     case 'x86_arm32':
-      return Architecture.x86_arm;
+      return Architecture.x86_arm32;
     case 'x86_arm64':
       return Architecture.x86_arm64;
     case 'amd64_x86':
@@ -65,9 +65,10 @@ function resolveArchitecture(architecture: string): Architecture {
     case 'x64_arm':
     case 'amd64_arm32':
     case 'x64_arm32':
-      return Architecture.x64_arm;
+      return Architecture.x64_arm32;
     case 'amd64_arm64':
     case 'x64_arm64':
+    case 'arm64':
       return Architecture.x64_arm64;
     default:
       throw new Error(`Unsupported architecture: ${architecture}`);

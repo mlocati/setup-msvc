@@ -33,10 +33,10 @@ describe('Architecture', () => {
     expect(Architecture.x86).toBe('x86');
     expect(Architecture.x64).toBe('amd64');
     expect(Architecture.x86_x64).toBe('x86_amd64');
-    expect(Architecture.x86_arm).toBe('x86_arm');
+    expect(Architecture.x86_arm32).toBe('x86_arm');
     expect(Architecture.x86_arm64).toBe('x86_arm64');
     expect(Architecture.x64_x86).toBe('amd64_x86');
-    expect(Architecture.x64_arm).toBe('amd64_arm');
+    expect(Architecture.x64_arm32).toBe('amd64_arm');
     expect(Architecture.x64_arm64).toBe('amd64_arm64');
   });
 });

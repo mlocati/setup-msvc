@@ -45,9 +45,9 @@ describe('resolveArchitecture', () => {
     expect(resolveArchitecture(variant)).toBe(Architecture.x86_x64);
   });
 
-  const x86armVariants = ['x86_arm', 'x86-arm', '\tx86_ARM', '\tx86-ARM32'];
-  it.each(x86armVariants)('should resolve x86_arm architectures correctly for %s', (variant) => {
-    expect(resolveArchitecture(variant)).toBe(Architecture.x86_arm);
+  const x86arm32Variants = ['x86_arm', 'x86_arm32', 'x86-arm', 'x86-arm32', '\tx86_ARM', '\tX86-ArM32'];
+  it.each(x86arm32Variants)('should resolve x86_arm32 architectures correctly for %s', (variant) => {
+    expect(resolveArchitecture(variant)).toBe(Architecture.x86_arm32);
   });
 
   const x86arm64Variants = ['x86_arm64', 'x86-arm64', '\tx86_ARM64'];
@@ -60,12 +60,23 @@ describe('resolveArchitecture', () => {
     expect(resolveArchitecture(variant)).toBe(Architecture.x64_x86);
   });
 
-  const x64armVariants = ['amd64_arm', 'x64_arm', '\tX64_ARM', '\tAMD64_ARM', 'x64-arm32', 'amd64-arm32'];
-  it.each(x64armVariants)('should resolve x64_arm architectures correctly for %s', (variant) => {
-    expect(resolveArchitecture(variant)).toBe(Architecture.x64_arm);
+  const x64armVariants = [
+    'amd64_arm',
+    'amd64_arm32',
+    'x64_arm',
+    'x64_arm32',
+    '\tX64_ARM',
+    '\tX64_ARM32',
+    '\tAMD64_ARM',
+    '\tAMD64_ARM32',
+    'x64-arm32',
+    'amd64-arm32',
+  ];
+  it.each(x64armVariants)('should resolve x64_arm32 architectures correctly for %s', (variant) => {
+    expect(resolveArchitecture(variant)).toBe(Architecture.x64_arm32);
   });
 
-  const x64arm64Variants = ['amd64_arm64', 'x64_arm64', '\tX64_ARM64', '\tAMD64_ARM64', '\tAMD64-ARM64\n'];
+  const x64arm64Variants = ['amd64_arm64', 'x64_arm64', '\tX64_ARM64', '\tAMD64_ARM64', '\tAMD64-ARM64\n', 'ArM64'];
   it.each(x64arm64Variants)('should resolve x64_arm64 architectures correctly for %s', (variant) => {
     expect(resolveArchitecture(variant)).toBe(Architecture.x64_arm64);
   });
